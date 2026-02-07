@@ -1,0 +1,148 @@
+import React from "react";
+import { Upload, FileText, Landmark } from "lucide-react";
+import Girlimg from "../../assets/img/girl.svg";
+
+const cards = [
+  {
+    title: "Upload Your PDF",
+    text: "Translate scanned and digital legal documents with full layout preservation and enterprise-grade accuracy.",
+    icon: Upload,
+  },
+  {
+    title: "7/12 & Property Extracts",
+    text: "Best-in-class translation for land records, Ferfar, and property cards while keeping original tables intact.",
+    icon: FileText,
+  },
+  {
+    title: "Government Circulars (GRs)",
+    text: "Instantly translate official government resolutions with precision and legal reliability.",
+    icon: Landmark,
+  },
+];
+
+const HighImpactUseCases = () => {
+  return (
+    <section className="relative w-full py-28 bg-white overflow-hidden">
+      
+      {/* BACKGROUND DECORATION */}
+      <div className="pointer-events-none absolute inset-0">
+        {/* Top Right Blob */}
+        <div
+          className="
+            absolute
+            -top-32 -right-32
+            w-[420px] h-[420px]
+            rounded-full
+            bg-gradient-to-br from-blue-300 to-blue-500
+            opacity-15
+            blur-3xl
+          "
+        />
+
+        {/* Bottom Left Blob */}
+        <div
+          className="
+            absolute
+            -bottom-40 -left-40
+            w-[460px] h-[460px]
+            rounded-full
+            bg-gradient-to-br from-indigo-300 to-purple-400
+            opacity-10
+            blur-3xl
+          "
+        />
+      </div>
+
+      <div className="relative max-w-6xl mx-auto px-4">
+        <img src={Girlimg} className="girl-img" alt="" />
+        {/* Section Title */}
+        <div className="text-center mb-24">
+          <h2 className="text-4xl font-bold text-slate-900 big-h">
+            High-Impact Use Cases
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 ">
+
+          {/* LEFT CONTENT */}
+          <div>
+            <h3 className="text-3xl font-semibold text-slate-900 mb-10 leading-snug big-h">
+              Ready to Simplify Your <br />
+              Document Workflow?
+            </h3>
+
+            <button
+              className="
+                gsap-up
+                inline-flex items-center justify-center
+                bg-blue-500 hover:bg-blue-600
+                text-white text-lg font-medium
+                px-8 py-4 rounded-xl
+                shadow-lg shadow-blue-500/30
+                transition-all
+              "
+            >
+              Start Translate
+            </button>
+          </div>
+
+          {/* RIGHT CARDS */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+
+            {cards.map((item, index) => {
+              const Icon = item.icon;
+
+              return (
+                <div
+                  key={index}
+                  className={`
+                    gsap-up-stagger
+                    bg-slate-50
+                    border border-slate-200
+                    rounded-2xl
+                    p-6
+                    shadow-md
+                    hover:shadow-xl
+                    transition-all
+                    max-w-md
+                    ${
+                      index === 0
+                        ? "md:row-span-2 bg-white border-blue-200 shadow-xl"
+                        : ""
+                    }
+                  `}
+                >
+                  {/* ICON + HEADING */}
+                  <div className="flex items-center gap-4 mb-4">
+                    <div
+                      className="
+                        w-12 h-12
+                        rounded-xl
+                        bg-blue-100
+                        flex items-center justify-center
+                        flex-shrink-0
+                      "
+                    >
+                      <Icon className="w-6 h-6 text-blue-600" />
+                    </div>
+
+                    <h4 className="font-semibold text-lg text-slate-900">
+                      {item.title}
+                    </h4>
+                  </div>
+
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    {item.text}
+                  </p>
+                </div>
+              );
+            })}
+
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default HighImpactUseCases;

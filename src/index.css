@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Frank+Ruhl+Libre:wght@300..900&display=swap');
+body {
+  margin: 0;
+  font-family: "Elms Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  background-color: #f5f6fc;
+}
+html{
+  overflow-x: hidden;
+}
+code {
+   font-family: "Frank Ruhl Libre", seri
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+   font-family: "Frank Ruhl Libre", seri
+}
+.m-header a{
+font-size: 14px;
+letter-spacing: 1px;
+}
+.hero{
+  position: relative;
+}
+.hero:before{
+      content: "";
+    position: absolute;
+    left: -218px;
+    top: 121px;
+    width: 512px;
+    height: 512px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -o-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+    background: #3894ff;
+    filter: blur(75px);
+    opacity: .1;
+    z-index: -1;
+}
+.hero::after{
+      content: "";
+    position: absolute;
+    top: -177px;
+    right: -210px;
+    width: 515px;
+    height: 515px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -o-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+    background: #ff7438;
+    filter: blur(150px);
+    opacity: .1;
+    z-index: -1;
+}
+
+.feature-pill {
+    border-radius: 9999px;
+    border-width: 1px;
+    border-color: hsl(var(--border));
+    background-color: hsl(var(--card));
+    padding: 1rem 2rem;
+    text-align: center;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    color: hsl(var(--foreground));
+    --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / .1), 0 2px 4px -2px rgb(0 0 0 / .1);
+    --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    transition-property: all;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    transition-duration: .3s;
+    animation-duration: .3s;
+}
+.m-work-card{
+  box-shadow: 10px 9px 1px #90caf929;
+}
+/* Arrow */
+
+
+.m-work-card::after {
+     content: "";
+    position: absolute;
+    top: 50%;
+    right: -31px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 23px solid transparent;
+    border-bottom: 23px solid transparent;
+    border-left: 23px solid #edf6fe;
+}
+.ft-logo{
+   filter: brightness(0) invert(1);
+   width: 150px
+}
+.rocket-img{
+  position: absolute;
+    width: 270px;
+    top: 30px;
+    left: 30px;
+}
+.girl-img{
+      position: absolute;
+    bottom: -110px;
+    left: -150px;
+    width: 580px;
+}
+@media (max-width: 991px){
+  .m-work-card::after{
+    display: none;
+  }
+}
