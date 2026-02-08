@@ -119,6 +119,9 @@ letter-spacing: 1px;
     left: -150px;
     width: 580px;
 }
+.ab-img{
+  width: 500px
+}
 @media (max-width: 991px){
   .m-work-card::after{
     display: none;

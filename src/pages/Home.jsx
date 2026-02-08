@@ -10,14 +10,14 @@ import FAQSection from "../components/Home/FAQSection";
 export default function Home() {
   return (
     <>
-      <Hero />
-      <DocSlider />
-      <KeyFeatures />
-      <HowItWorks />
-      <WhyChooseUs />
-      <HighImpactUseCases />
-      <Testimonial />
-      <FAQSection />
+     <Hero />
+     <DocSlider />
+    <KeyFeatures />
+   <HowItWorks />
+   <WhyChooseUs />
+   <HighImpactUseCases />
+   <Testimonial />
+   <FAQSection />
     </>
   );
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Logo from "../assets/img/logo.svg";
 
 const Navbar = () => {
@@ -29,13 +30,13 @@ const Navbar = () => {
 
           {/* Logo */}
           <div className="flex items-center">
-            <a href="/" onClick={(e) => e.preventDefault()}>
+            <Link to="/">
               <img
                 className="w-[100px] sm:w-[100px] lg:w-[200px]"
                 src={Logo}
                 alt="Logo"
               />
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Menu */}
@@ -56,12 +57,19 @@ const Navbar = () => {
 
           {/* Desktop Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <button className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition">
+            <Link
+              to="/login"
+              className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition"
+            >
               Login
-            </button>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+            </Link>
+
+            <Link
+              to="/signup"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+            >
               Sign Up
-            </button>
+            </Link>
           </div>
 
           {/* Mobile Hamburger */}
@@ -77,9 +85,17 @@ const Navbar = () => {
               viewBox="0 0 24 24"
             >
               {open ? (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               )}
             </svg>
           </button>
@@ -105,12 +121,21 @@ const Navbar = () => {
           ))}
 
           <div className="flex flex-col space-y-4 mt-6 w-3/4">
-            <button className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition">
+            <Link
+              to="/login"
+              onClick={() => setOpen(false)}
+              className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition text-center"
+            >
               Login
-            </button>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+            </Link>
+
+            <Link
+              to="/signup"
+              onClick={() => setOpen(false)}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-center"
+            >
               Sign Up
-            </button>
+            </Link>
           </div>
         </div>
       </div>

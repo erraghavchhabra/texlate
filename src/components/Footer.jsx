@@ -20,10 +20,10 @@ const Footer = () => {
 
             <div className="flex gap-6 text-sm text-gray-400">
               <a href="#" className="hover:text-white transition">
-                Privacy
+                Privacy Policy
               </a>
               <a href="#" className="hover:text-white transition">
-                Policy
+                Terms
               </a>
             </div>
           </div>
