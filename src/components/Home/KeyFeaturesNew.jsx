@@ -59,7 +59,7 @@ export default function KeyFeaturesNew() {
 
   return (
     <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-muted/20 to-background overflow-hidden">
-      <div className="container mx-auto">
+      <div className="container max-w-7xl mx-auto">
 
         {/* Header */}
         <div className="text-center mb-12 md:mb-20 wow animate__animated animate__fadeInDown">

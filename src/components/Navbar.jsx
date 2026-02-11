@@ -17,6 +17,26 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+
+      const scrolled = (scrollTop / docHeight) * 100;
+      setProgress(scrolled);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <header
       className={`
@@ -26,9 +46,14 @@ const Navbar = () => {
         ${scrolled ? "bg-white/70  shadow-sm" : "bg-white/70"}
       `}
     >
+      <div className="md:hidden absolute top-full left-0 w-full h-[2px] bg-transparent z-[9999]">
+        <div
+          className="h-full bg-blue-600 transition-all duration-150"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/">

@@ -80,14 +80,19 @@ export default function Home() {
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [sections.length, isMobile]);
-
+  const progress = (index / (sections.length - 1)) * 100;
   return (
     <div className="relative w-full overflow-hidden">
+      {/* PROGRESS BAR */}
+      <div className="fixed top-16 left-0 w-full h-[2px] bg-transparent z-[9999]">
+        <div
+          className="h-full bg-blue-600 transition-all duration-150"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
       {/* MOBILE: normal stacked scroll */}
       {isMobile ? (
-        <div className="w-full">
-          {sections.map((Section) => Section)}
-        </div>
+        <div className="w-full">{sections.map((Section) => Section)}</div>
       ) : (
         /* DESKTOP: motion scroll effect */
         <div className="relative h-screen w-full">
@@ -103,10 +108,10 @@ export default function Home() {
                     index === sections.length
                       ? "-100%"
                       : i < index
-                      ? "-100%"
-                      : isActive
-                      ? "0%"
-                      : "100%",
+                        ? "-100%"
+                        : isActive
+                          ? "0%"
+                          : "100%",
                 }}
                 transition={{ duration: 0.8, ease: "easeInOut" }}
                 className="absolute top-0 left-0 w-full h-screen"
