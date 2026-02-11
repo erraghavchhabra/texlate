@@ -14,62 +14,42 @@ import {
 const keyFeatures = [
   {
     number: "01",
-    icon: Brain,
-    title: "AI-Powered Accuracy",
+    icon: Upload,
+    title: "Upload Your PDF",
     description:
-      "Leverage advanced machine learning models to achieve 99%+ accuracy in document parsing, data extraction, and content recognition across all formats.",
+      "Advanced AI translates digital and scanned legal documents across Indian languages with contextual accuracy. Ensures layout preservation, enterprise-grade security, and affordable speed for high-volume legal translation.",
     color: "from-[hsl(45,90%,55%)] to-[hsl(35,90%,50%)]",
     borderColor: "border-[hsl(45,90%,55%)]",
     position: "top",
   },
   {
     number: "02",
-    icon: FileText,
-    title: "Scanned Document Support",
+    icon: Scan,
+    title: "Smart Analysis",
     description:
-      "Seamlessly process scanned PDFs, photos, and handwritten documents with state-of-the-art OCR technology that handles any quality level.",
+      "Our system instantly analyses your document:\n• Validates file integrity\n• Calculates total page cost\n• Generates an instant order summary",
     color: "from-[hsl(150,70%,45%)] to-[hsl(170,70%,40%)]",
     borderColor: "border-[hsl(150,70%,45%)]",
     position: "bottom",
   },
   {
     number: "03",
-    icon: LayoutTemplate,
-    title: "Structure & Layout Preservation",
+    icon: CreditCard,
+    title: "Payment",
     description:
-      "Maintain original document formatting including tables, headers, footers, and complex multi-column layouts during conversion.",
+      "Complete your payment securely through our payment gateway.",
     color: "from-[hsl(186,78%,45%)] to-[hsl(220,70%,55%)]",
     borderColor: "border-[hsl(186,78%,45%)]",
     position: "top",
   },
   {
     number: "04",
-    icon: Languages,
-    title: "Vernacular Language Expert",
+    icon: Download,
+    title: "Download",
     description:
-      "Support for 50+ regional and vernacular languages with native script recognition and accurate transliteration capabilities.",
+      "Once processing is complete download your translated PDF as well as a Word (.docx) file instantly!",
     color: "from-[hsl(220,70%,55%)] to-[hsl(250,70%,60%)]",
     borderColor: "border-[hsl(220,70%,55%)]",
-    position: "bottom",
-  },
-  {
-    number: "05",
-    icon: Zap,
-    title: "Fast & Cost-Effective",
-    description:
-      "Process thousands of pages per minute at a fraction of the cost of manual data entry, saving up to 90% on document processing.",
-    color: "from-[hsl(45,90%,55%)] to-[hsl(35,90%,50%)]",
-    borderColor: "border-[hsl(45,90%,55%)]",
-    position: "top",
-  },
-  {
-    number: "06",
-    icon: Shield,
-    title: "Secure & Confidential",
-    description:
-      "Enterprise-grade encryption, SOC 2 compliance, and zero data retention policies ensure your sensitive documents stay protected.",
-    color: "from-[hsl(150,70%,45%)] to-[hsl(170,70%,40%)]",
-    borderColor: "border-[hsl(150,70%,45%)]",
     position: "bottom",
   },
 ];
@@ -121,7 +101,7 @@ export default function KeyFeaturesNew() {
           </svg>
 
           {/* Responsive Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 relative z-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 relative z-10">
             {keyFeatures.map((feature, index) => {
               const Icon = feature.icon;
               const isTop = feature.position === "top";
