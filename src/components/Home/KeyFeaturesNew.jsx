@@ -3,12 +3,10 @@
 import React, { useEffect } from "react";
 import WOW from "wowjs";
 import {
-  FileText,
-  Shield,
-  Brain,
-  LayoutTemplate,
-  Languages,
-  Zap,
+  CreditCard,
+  Download,
+  Scan,
+  Upload,
 } from "lucide-react";
 
 const keyFeatures = [
@@ -109,8 +107,8 @@ export default function KeyFeaturesNew() {
               return (
                 <div
                   key={index}
-                  className={`flex flex-col lg:${
-                    isTop ? "justify-start" : "justify-end pt-16"
+                  className={`flex flex-col  lg:${
+                    isTop ? "justify-start" : "justify-end md:pt-16"
                   } wow animate__animated animate__fadeInUp`}
                   style={{ animationDelay: `${index * 150}ms` }}
                 >

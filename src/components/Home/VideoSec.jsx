@@ -8,11 +8,11 @@ const VideoSec = () => {
   }, []);
 
   return (
-    <section className="w-full min-h-screen flex items-center py-20 bg-white relative overflow-hidden">
+    <section className="w-full md:min-h-screen flex items-center py-20 bg-white relative overflow-hidden">
       
       {/* Background Glow Effects */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-blue-100 rounded-full blur-3xl opacity-40 animate-pulse"></div>
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-indigo-100 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+      <div className="max-md:hidden absolute top-20 left-10 w-72 h-72 bg-blue-100 rounded-full blur-3xl opacity-40 animate-pulse"></div>
+      <div className="max-md:hidden absolute bottom-10 right-10 w-96 h-96 bg-indigo-100 rounded-full blur-3xl opacity-30 animate-pulse"></div>
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
 
@@ -42,7 +42,7 @@ const VideoSec = () => {
           </div>
 
           {/* Button */}
-          <div className="mt-14 wow animate__animated animate__zoomIn" data-wow-delay="0.4s">
+          {/* <div className="mt-14 wow animate__animated animate__zoomIn" data-wow-delay="0.4s">
             <a
               href="#"
               className="inline-block px-8 py-3 text-[15px] font-semibold rounded-xl 
@@ -54,7 +54,7 @@ const VideoSec = () => {
             >
               Try Now
             </a>
-          </div>
+          </div> */}
 
         </div>
       </div>
