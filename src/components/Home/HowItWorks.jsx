@@ -30,7 +30,7 @@ const steps = [
 
 const HowItWorks = () => {
   return (
-    <section className="w-full py-24 bg-white relative">
+    <section className="w-full h-screen py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-4">
 
         {/* Heading */}
@@ -91,34 +91,6 @@ const HowItWorks = () => {
 
         </div>
 
-        {/* Video Section */}
-        <div className="text-center mt-20">
-          <h2 className="text-4xl font-bold mb-12 big-h">
-            See how a legal document is translated in 1 minute
-          </h2>
-
-          <div className="flex justify-center">
-            <div className="relative w-full max-w-4xl aspect-video rounded-2xl overflow-hidden shadow-lg">
-              <iframe
-                src="https://www.youtube.com/embed/OHz0xIR8uwI"
-                title="Legal document translation demo"
-                className="absolute inset-0 w-full h-full"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              />
-            </div>
-          </div>
-
-          <div className="mt-12">
-            <a
-              href="#"
-              className="hero-btn px-8 py-3 text-[15px] font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
-            >
-              Try Now
-            </a>
-          </div>
-        </div>
 
       </div>
     </section>

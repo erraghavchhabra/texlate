@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
@@ -10,8 +10,17 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
 import useSplitTextGSAP from "./animations/useSplitTextGSAP";
 
+// 👇 import WOW
+import WOW from "wowjs";
+import "animate.css";
+
 export default function App() {
   useSplitTextGSAP();
+
+  useEffect(() => {
+    // initialize WOW once at app start
+    new WOW.WOW({ live: false }).init();
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -25,8 +34,6 @@ export default function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<Terms />} />
       </Routes>
-
-      <Footer />
     </div>
   );
 }
