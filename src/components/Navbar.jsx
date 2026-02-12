@@ -41,14 +41,14 @@ const Navbar = () => {
     <header
       className={`
         m-header fixed top-0 z-50 w-full
-        transition-all duration-300 backdrop-blur-md
+        transition-all duration-300 backdrop-blur-md 
 
         ${scrolled ? "bg-white/70  shadow-sm" : "bg-white/70"}
       `}
     >
       <div className="md:hidden absolute top-full left-0 w-full h-[2px] bg-transparent z-[9999]">
         <div
-          className="h-full bg-blue-600 transition-all duration-150"
+          className="h-full bg-blue-600 transition-all duration-150 "
           style={{ width: `${progress}%` }}
         />
       </div>

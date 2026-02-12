@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import WOW from "wowjs";
 import "animate.css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 
@@ -34,7 +34,6 @@ const Testimonials = () => {
   return (
     <section className="h-screen w-full py-28">
       <div className="max-w-6xl mx-auto px-4">
-
         {/* Heading */}
         <div className="text-center mb-20">
           <h2 className="text-4xl font-bold text-slate-900 big-h wow animate__animated animate__fadeInDown">
@@ -43,8 +42,9 @@ const Testimonials = () => {
         </div>
 
         <Swiper
-          modules={[Navigation]}
+          modules={[Navigation, Autoplay]}
           loop
+          autoplay={{ delay: 5000, disableOnInteraction: false }}
           onBeforeInit={(swiper) => {
             swiper.params.navigation.prevEl = prevRef.current;
             swiper.params.navigation.nextEl = nextRef.current;
@@ -58,9 +58,11 @@ const Testimonials = () => {
           {testimonials.map((item, index) => (
             <SwiperSlide key={index}>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
                 {/* LEFT IMAGE */}
-                <div className="flex justify-center wow animate__animated animate__zoomIn" data-wow-delay="0.2s">
+                <div
+                  className="flex justify-center wow animate__animated animate__zoomIn"
+                  data-wow-delay="0.2s"
+                >
                   <div className="relative">
                     <div className="absolute -top-2 -right-6 text-5xl lg:text-[100px] text-blue-100 wow animate__animated animate__fadeIn">
                       “
@@ -74,18 +76,22 @@ const Testimonials = () => {
                 </div>
 
                 {/* RIGHT CONTENT */}
-                <div className="wow animate__animated animate__fadeInRight" data-wow-delay="0.4s">
+                <div
+                  className="wow animate__animated animate__fadeInRight"
+                  data-wow-delay="0.4s"
+                >
                   <p className="text-lg text-blue-900 font-semibold leading-relaxed mb-6">
                     “{item.text}”
                   </p>
 
-                  <div className="wow animate__animated animate__zoomIn" data-wow-delay="0.6s">
+                  <div
+                    className="wow animate__animated animate__zoomIn"
+                    data-wow-delay="0.6s"
+                  >
                     <h4 className="font-semibold text-2xl text-slate-900">
                       {item.name}
                     </h4>
-                    <p className="text-sm text-blue-600">
-                      {item.role}
-                    </p>
+                    <p className="text-sm text-blue-600">{item.role}</p>
                   </div>
                 </div>
               </div>
@@ -93,7 +99,10 @@ const Testimonials = () => {
           ))}
 
           {/* Navigation Buttons */}
-          <div className="flex justify-end gap-4 mt-10 wow animate__animated animate__fadeInUp" data-wow-delay="0.5s">
+          <div
+            className="flex justify-end gap-4 mt-10 wow animate__animated animate__fadeInUp"
+            data-wow-delay="0.5s"
+          >
             <button
               ref={prevRef}
               className="w-12 h-12 rounded-full border border-blue-300 text-blue-600 flex items-center justify-center hover:bg-blue-50 hover:border-blue-400 transition"

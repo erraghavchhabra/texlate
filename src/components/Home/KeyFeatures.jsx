@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 
 /* ======================= DATA ======================= */
-
 const features = [
   {
     label: "AI-Powered Accuracy",
@@ -116,7 +115,6 @@ const KeyFeatures = () => {
 
   const left = features.filter((f) => f.side === "left");
   const right = features.filter((f) => f.side === "right");
-  const activeData = features.find((f) => f.label === activeFeature);
 
   return (
     <section className="w-full py-24 md:h-screen flex items-center bg-slate-50">
@@ -136,39 +134,52 @@ const KeyFeatures = () => {
           {/* Left */}
           <div className="flex flex-col gap-10 items-end flex-1">
             {left.map((f, i) => (
-              <div key={f.label} className="flex items-center">
+              <div key={f.label} className="flex items-center relative group">
                 <FeaturePill {...f} onHover={setActiveFeature} delay={`${i * 0.2}s`} />
                 <ConnectorDot side="left" />
+
+                {/* Tooltip with slide-in animation */}
+                <div
+                  className={`absolute top-1/2 -right-[310px] -translate-y-1/2 w-[300px] z-20 rounded-xl border border-blue-200 bg-white p-4 shadow-xl text-sm
+                    transition-all duration-300 ease-out
+                    ${activeFeature === f.label ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0"}`}
+                >
+                  {/* Arrow */}
+                  <div className="absolute top-1/2 right-full -translate-y-1/2 w-0 h-0 border-t-8 border-b-8 border-r-8 border-t-transparent border-b-transparent border-r-white"></div>
+                  <div className="font-semibold text-slate-900 mb-1">{f.label}</div>
+                  <p className="text-slate-600 leading-relaxed">{f.description}</p>
+                </div>
               </div>
             ))}
           </div>
 
-          {/* Center */}
+          {/* Center Circle */}
           <div className="relative flex-shrink-0 wow animate__animated animate__zoomIn" data-wow-delay="0.3s">
             <div className="w-44 h-44 rounded-full border-2 border-dashed border-blue-300 bg-white flex items-center justify-center shadow-lg text-center">
               <span className="text-xl font-semibold">
                 Key <br /> Features
               </span>
             </div>
-
-            {activeData && (
-              <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-[100%] w-[300px] z-20 rounded-xl border border-blue-200 bg-white p-4 shadow-xl text-sm wow animate__animated animate__zoomIn">
-                <div className="font-semibold text-slate-900 mb-1">
-                  {activeData.label}
-                </div>
-                <p className="text-slate-600 leading-relaxed">
-                  {activeData.description}
-                </p>
-              </div>
-            )}
           </div>
 
           {/* Right */}
           <div className="flex flex-col gap-10 items-start flex-1">
             {right.map((f, i) => (
-              <div key={f.label} className="flex items-center">
+              <div key={f.label} className="flex items-center relative group">
                 <ConnectorDot side="right" />
                 <FeaturePill {...f} onHover={setActiveFeature} delay={`${i * 0.2}s`} />
+
+                {/* Tooltip with slide-in animation */}
+                <div
+                  className={`absolute top-1/2 -left-[310px] -translate-y-1/2 w-[300px] z-20 rounded-xl border border-blue-200 bg-white p-4 shadow-xl text-sm
+                    transition-all duration-300 ease-out
+                    ${activeFeature === f.label ? "-translate-x-0 opacity-100" : "-translate-x-4 opacity-0"}`}
+                >
+                  {/* Arrow */}
+                  <div className="absolute top-1/2 left-full -translate-y-1/2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-t-transparent border-b-transparent border-l-white"></div>
+                  <div className="font-semibold text-slate-900 mb-1">{f.label}</div>
+                  <p className="text-slate-600 leading-relaxed">{f.description}</p>
+                </div>
               </div>
             ))}
           </div>

@@ -13,22 +13,23 @@ import FAQSection from "../components/Home/FAQSection";
 import Footer from "../components/Footer";
 
 export default function Home() {
+  const [index, setIndex] = useState(0);
+  const isScrolling = useRef(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false); // 👈 track modal state
+
   const sections = [
     <Hero key="hero" />,
-    <DocSlider key="docslider" />,
+    <DocSlider key="docslider" onModalChange={setModalOpen} />, // 👈 pass callback
     <KeyFeatures key="features" />,
     <KeyFeaturesNew key="new" />,
-    <VideoSec Key="video" />,
+    <VideoSec key="video" />,
     <WhyChooseUs key="why" />,
     <HighImpactUseCases key="usecases" />,
     <Testimonial key="testimonial" />,
     <FAQSection key="faq" />,
     <Footer key="footer" />,
   ];
-
-  const [index, setIndex] = useState(0);
-  const isScrolling = useRef(false);
-  const [isMobile, setIsMobile] = useState(false);
 
   // Detect mobile on mount + resize
   useEffect(() => {
@@ -40,7 +41,7 @@ export default function Home() {
 
   // Scroll handler (desktop only)
   useEffect(() => {
-    if (isMobile) return;
+    if (isMobile || modalOpen) return; // 🚫 disable when modal open
 
     const handleWheel = (e) => {
       if (isScrolling.current) return;
@@ -59,11 +60,11 @@ export default function Home() {
 
     window.addEventListener("wheel", handleWheel, { passive: true });
     return () => window.removeEventListener("wheel", handleWheel);
-  }, [sections.length, isMobile]);
+  }, [sections.length, isMobile, modalOpen]);
 
   // Arrow keys (desktop only)
   useEffect(() => {
-    if (isMobile) return;
+    if (isMobile || modalOpen) return; // 🚫 disable when modal open
 
     const handleKey = (e) => {
       if (isScrolling.current) return;
@@ -79,17 +80,20 @@ export default function Home() {
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [sections.length, isMobile]);
+  }, [sections.length, isMobile, modalOpen]);
+
   const progress = (index / (sections.length - 1)) * 100;
+
   return (
     <div className="relative w-full overflow-hidden">
       {/* PROGRESS BAR */}
-      <div className="fixed top-16 left-0 w-full h-[2px] bg-transparent z-[9999]">
+      <div className="max-md:hidden fixed top-16 left-0 w-full h-[2px] bg-transparent z-50">
         <div
-          className="h-full bg-blue-600 transition-all duration-150"
+          className="h-full bg-blue-600 transition-all duration-150 "
           style={{ width: `${progress}%` }}
         />
       </div>
+
       {/* MOBILE: normal stacked scroll */}
       {isMobile ? (
         <div className="w-full">{sections.map((Section) => Section)}</div>
@@ -108,10 +112,10 @@ export default function Home() {
                     index === sections.length
                       ? "-100%"
                       : i < index
-                        ? "-100%"
-                        : isActive
-                          ? "0%"
-                          : "100%",
+                      ? "-100%"
+                      : isActive
+                      ? "0%"
+                      : "100%",
                 }}
                 transition={{ duration: 0.8, ease: "easeInOut" }}
                 className="absolute top-0 left-0 w-full h-screen"
