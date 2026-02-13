@@ -197,8 +197,8 @@ const WhyChooseUs = () => {
           whileInView="visible"
           viewport={{ once: true }}
         >
-          <a
-            href="#"
+          <a id="why-btn"
+            href="/why-choose-us"
             className="
               hero-btn px-8 py-3 text-[15px] font-semibold rounded-xl
               bg-blue-600 text-white

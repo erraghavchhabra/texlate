@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom"; // ✅ import useLocation
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 import About from "./pages/About";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
+import WhyUs from "./pages/WhyUs";
 import useSplitTextGSAP from "./animations/useSplitTextGSAP";
 
 // 👇 import WOW
@@ -15,25 +16,37 @@ import WOW from "wowjs";
 import "animate.css";
 
 export default function App() {
+  // Custom GSAP animation hook
   useSplitTextGSAP();
 
+  // Get current route
+  const location = useLocation();
+
   useEffect(() => {
-    // initialize WOW once at app start
+    // Initialize WOW.js once at app start
     new WOW.WOW({ live: false }).init();
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
+      {/* Navbar */}
       <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/terms" element={<Terms />} />
-      </Routes>
+      {/* Routes */}
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/why-choose-us"  element={<WhyUs />} />
+        </Routes>
+      </main>
+
+      {/* Footer */}
+      {location.pathname !== "/" && <Footer />}
     </div>
   );
 }
