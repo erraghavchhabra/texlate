@@ -43,7 +43,7 @@ const Hero = () => {
 
           {/* Buttons */}
           <div
-            className="wow animate__animated animate__fadeInUp flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4"
+            className="wow animate__animated animate__fadeInUp flex flex-col space-y-4 sm:flex-row justify-center mb-0 sm:mb-16 lg:mb-0 lg:justify-start sm:space-y-0 sm:space-x-4"
             data-wow-delay="0.6s"
           >
             <a
@@ -62,7 +62,7 @@ const Hero = () => {
         </div>
 
         {/* RIGHT IMAGE */}
-        <div className="wow animate__animated animate__fadeInRight flex items-center justify-center p-2 lg:p-6 mt-8 lg:mt-0 lg:basis-3/6 relative">
+        <div className="wow animate__animated animate__fadeInRight flex items-center justify-center p-2 lg:p-6 lg:mt-0 lg:basis-3/6 relative">
           <div className="relative w-full h-[400px] lg:h-[500px] flex items-center justify-center">
             <img src={Hbg} alt="hero background" className="absolute" />
             <img src={HTop} alt="hero top" className="relative rounded-xl" />
