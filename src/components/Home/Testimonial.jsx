@@ -32,7 +32,7 @@ const Testimonials = () => {
   }, []);
 
   return (
-    <section className="h-screen w-full py-28">
+    <section className="lg:h-screen w-full py-28">
       <div className="max-w-6xl mx-auto px-4">
         {/* Heading */}
         <div className="text-center mb-20">

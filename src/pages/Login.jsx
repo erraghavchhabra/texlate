@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { HiEye, HiEyeOff } from "react-icons/hi";
+import { FcGoogle } from "react-icons/fc"; // ✅ Google Icon Added
 
-
- import loginImage from "../assets/img/login.svg";
+import loginImage from "../assets/img/login.svg";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,39 +19,46 @@ const Login = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex items-center justify-center px-4 lg:py-8 py-24">
-      
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex items-center justify-center px-4 lg:py-24 py-24">
+
       {/* Main Container */}
       <div className="w-full max-w-6xl bg-white shadow-2xl rounded-3xl overflow-hidden grid md:grid-cols-2">
 
         {/* ================= LEFT IMAGE ================= */}
-        {/* On mobile it moves BELOW using order */}
         <div className="order-2 md:order-1 bg-white border-r-2 flex items-center justify-center p-10">
-          
-          {/* Replace with your image */}
           <img
             src={loginImage}
             alt="Login Visual"
             className="max-h-[420px] w-full object-contain"
           />
-
         </div>
 
         {/* ================= RIGHT FORM ================= */}
         <div className="order-1 md:order-2 flex items-center justify-center p-6 md:p-10">
-          
           <div className="w-full max-w-md">
-            
+            {/* Sign Up Link - Top Right */}
+            <div className="flex justify-end mb-4">
+              <p className="text-sm text-blue-700/70">
+                Don't have an account?{" "}
+                <a
+                  href="/signup"
+                  className=" font-semibold hover:underline"
+                >
+                  Sign Up
+                </a>
+              </p>
+            </div>
+
             <h2 className="text-3xl font-bold mb-2 ">
               Welcome Back
             </h2>
 
-            <p className="text-blue-700/70 mb-8">
+            <p className="text-slate-500 mb-8">
               Enter your credentials to access your account
             </p>
 
             <form className="space-y-5">
-              
+
               {/* Email */}
               <div>
                 <label className="block text-sm font-medium mb-1 text-blue-900">
@@ -106,14 +113,20 @@ const Login = () => {
               </button>
             </form>
 
-            <div className="mt-6 text-center">
-              <p className="text-blue-700/70">
-                Don't have an account?{" "}
-                <a href="/signup" className="text-blue-600 font-semibold hover:underline">
-                  Sign Up
-                </a>
-              </p>
+            {/* ✅ Google Button Section Added (UI Only) */}
+            <div className="flex items-center gap-4 my-5">
+              <div className="flex-1 h-px bg-gray-200"></div>
+              <span className="text-sm text-gray-400">OR</span>
+              <div className="flex-1 h-px bg-gray-200"></div>
             </div>
+
+            <button
+              type="button"
+              className="w-full flex items-center justify-center gap-3 border border-blue-200 py-3 rounded-lg font-medium hover:bg-blue-50 transition"
+            >
+              <FcGoogle size={22} />
+              Sign in with Google
+            </button>
 
           </div>
         </div>

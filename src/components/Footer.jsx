@@ -61,12 +61,7 @@ const Footer = () => {
           <a href="#" className="hover:text-white transition">
             Legal
           </a>
-          <a href="#" className="hover:text-white transition">
-            Privacy Policy
-          </a>
-          <a href="#" className="hover:text-white transition">
-            Terms
-          </a>
+         
         </nav>
 
         {/* Bottom HR */}

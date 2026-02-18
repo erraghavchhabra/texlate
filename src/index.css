@@ -239,3 +239,8 @@ h6 {
     display: none;
   }
 }
+@media(max-width: 991px){
+  .girl-img{
+    display: none;
+  }
+}

@@ -67,8 +67,8 @@ const DocSlider = ({ onModalChange }) => {
             // }}
 
             breakpoints={{
-              0: { slidesPerView: 1.1 },
-              640: { slidesPerView: 1.4 },
+              0: { slidesPerView: 1 },
+              640: { slidesPerView: 1 },
               1024: { slidesPerView: 3 },
             }}
             style={{ paddingBlock: "20px" }}
