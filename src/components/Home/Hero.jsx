@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import WOW from "wowjs";
 import Hbg from "../../assets/img/h-bg.svg";
 import HTop from "../../assets/img/h-top.png";
-
+import { Link } from "react-router-dom";
 const Hero = () => {
   useEffect(() => {
     const wow = new WOW.WOW({
@@ -46,12 +46,13 @@ const Hero = () => {
             className="wow animate__animated animate__fadeInUp flex flex-col space-y-4 sm:flex-row justify-center mb-0 sm:mb-16 lg:mb-0 lg:justify-start sm:space-y-0 sm:space-x-4"
             data-wow-delay="0.6s"
           >
-            <a
-              href="#"
-              className="px-8 py-3 text-[15px] font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
+            <Link
+              to="/upload"
+              className="px-8 py-3 text-[15px] font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition inline-block"
             >
               Upload & Translate
-            </a>
+            </Link>
+
             <a
               href="#"
               className="px-8 py-3 text-[15px] font-semibold border border-gray-300 rounded-xl hover:bg-gray-100 transition"

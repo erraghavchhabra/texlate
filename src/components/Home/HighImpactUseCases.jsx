@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import WOW from "wowjs";
 import "animate.css";
 import { Upload, FileText, Landmark } from "lucide-react";
@@ -23,13 +24,15 @@ const cards = [
 ];
 
 const HighImpactUseCases = () => {
+  const navigate = useNavigate(); // ✅ MUST be inside component
+
   useEffect(() => {
     new WOW.WOW({ live: false }).init();
   }, []);
 
   return (
     <section className="relative lg:h-screen w-full py-28 bg-white overflow-hidden">
-      
+
       {/* BACKGROUND DECORATION */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-32 -right-32 w-[420px] h-[420px] rounded-full bg-gradient-to-br from-blue-300 to-blue-500 opacity-15 blur-3xl" />
@@ -37,7 +40,7 @@ const HighImpactUseCases = () => {
       </div>
 
       <div className="relative max-w-6xl mx-auto px-4">
-        
+
         {/* Floating Girl Image */}
         <img
           src={Girlimg}
@@ -59,7 +62,7 @@ const HighImpactUseCases = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
 
           {/* LEFT CONTENT */}
-          <div>
+          <div className="relative z-10">
             <h3
               className="text-3xl font-semibold text-slate-900 mb-10 leading-snug big-h wow animate__animated animate__fadeInLeft"
               data-wow-delay="0.3s"
@@ -69,6 +72,7 @@ const HighImpactUseCases = () => {
             </h3>
 
             <button
+              onClick={() => navigate("/upload")}
               className="
                 inline-flex items-center justify-center
                 bg-blue-500 hover:bg-blue-600
@@ -86,7 +90,6 @@ const HighImpactUseCases = () => {
 
           {/* RIGHT CARDS */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-
             {cards.map((item, index) => {
               const Icon = item.icon;
 
@@ -103,10 +106,9 @@ const HighImpactUseCases = () => {
                     transition-all
                     max-w-md
                     wow animate__animated animate__zoomInUp
-                    ${
-                      index === 0
-                        ? "md:row-span-2 bg-white border-blue-200 shadow-xl"
-                        : ""
+                    ${index === 0
+                      ? "md:row-span-2 bg-white border-blue-200 shadow-xl"
+                      : ""
                     }
                   `}
                   data-wow-delay={`${0.4 + index * 0.2}s`}
@@ -127,8 +129,8 @@ const HighImpactUseCases = () => {
                 </div>
               );
             })}
-
           </div>
+
         </div>
       </div>
     </section>

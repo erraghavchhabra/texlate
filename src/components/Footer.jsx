@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Facebook, Youtube, Instagram } from "lucide-react";
+import { Link } from "react-router-dom";
 import WOW from "wowjs";
 import FTlogo from "../assets/img/logoft.png";
 
@@ -50,18 +51,20 @@ const Footer = () => {
         {/* Top HR */}
         <div className="w-32 border-t border-gray-700 mb-8 wow animate__animated animate__fadeIn animate__delay-2s"></div>
 
-        {/* Links */}
-        <nav className="flex gap-10 text-sm text-gray-400 mb-8 wow animate__animated animate__fadeInUp animate__delay-2s">
-          <a href="#" className="hover:text-white transition">
-            Home
-          </a>
-          <a href="#" className="hover:text-white transition">
+        {/* Links (Same as Navbar) */}
+        <nav className="flex gap-4 lg:gap-10 text-sm text-gray-400 mb-8 wow animate__animated animate__fadeInUp animate__delay-2s">
+          <Link to="/about" className="hover:text-white transition">
             About Us
-          </a>
-          <a href="#" className="hover:text-white transition">
+          </Link>
+          <Link to="/why-choose-us" className="hover:text-white transition">
+            Why Choose Us
+          </Link>
+          <Link to="/help" className="hover:text-white transition">
+            Help Center
+          </Link>
+          <Link to="/legal" className="hover:text-white transition">
             Legal
-          </a>
-         
+          </Link>
         </nav>
 
         {/* Bottom HR */}
