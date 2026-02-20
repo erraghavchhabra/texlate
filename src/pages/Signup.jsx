@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { HiEye, HiEyeOff } from "react-icons/hi";
-
+import { FcGoogle } from "react-icons/fc";
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -111,7 +111,20 @@ const Signup = () => {
             Sign Up
           </button>
         </form>
+{/* ✅ Google Button Section Added (UI Only) */}
+            <div className="flex items-center gap-4 my-5">
+              <div className="flex-1 h-px bg-gray-200"></div>
+              <span className="text-sm text-gray-400">OR</span>
+              <div className="flex-1 h-px bg-gray-200"></div>
+            </div>
 
+            <button
+              type="button"
+              className="w-full flex items-center justify-center gap-3 border border-blue-200 py-3 rounded-lg font-medium hover:bg-blue-50 transition"
+            >
+              <FcGoogle size={22} />
+              Sign Up with Google
+            </button>
         {/* Footer Links */}
         <div className="mt-6 text-center">
           <p className="text-gray-500">

@@ -49,6 +49,7 @@ const DocSlider = ({ onModalChange }) => {
             grabCursor={true}
             centeredSlides={false}
             slidesPerView={3}
+            spaceBetween={0}
             loop={true}
             autoplay={{
               delay: 4000,
@@ -58,13 +59,7 @@ const DocSlider = ({ onModalChange }) => {
               nextEl: ".doc-next",
               prevEl: ".doc-prev",
             }}
-            // coverflowEffect={{
-            //   rotate: 35,
-            //   stretch: 0,
-            //   depth: 220,
-            //   modifier: 1,
-            //   slideShadows: false,
-            // }}
+          
 
             breakpoints={{
               0: { slidesPerView: 1 },
@@ -74,34 +69,38 @@ const DocSlider = ({ onModalChange }) => {
             style={{ paddingBlock: "20px" }}
           >
             {images.map((img, index) => (
-              <SwiperSlide
-                key={index}
-                className="doc-slide bg-transparent rounded-2xl overflow-hidden"
-              >
-                <div
-                  className="wow animate__animated animate__fadeInUp relative group overflow-hidden rounded-2xl shadow-2xl transition-all duration-500 flex gap-4"
-                  data-wow-delay={`${index * 0.15}s`}
-                >
-                  <img
-                    src={img}
-                    alt={`Document ${index + 1} Left`}
-                    className="w-1/2 rounded-2xl transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <img
-                    src={images[(index + 1) % images.length]}
-                    alt={`Document ${index + 1} Right`}
-                    className="w-1/2 rounded-2xl transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl">
-                    <button
-                      onClick={() => setActiveSlide(index)}
-                      className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center hover:scale-110 transition-transform"
-                    >
-                      <ZoomIn className="w-6 h-6 text-slate-900" />
-                    </button>
-                  </div>
-                </div>
-              </SwiperSlide>
+             <SwiperSlide
+  key={index}
+  className="doc-slide bg-transparent rounded-2xl overflow-hidden"
+>
+  <div
+    className=" relative group overflow-hidden rounded-2xl shadow-2xl transition-all duration-500 flex"
+    data-wow-delay={`${index * 0.15}s`}
+  >
+    <div className="flex w-full gap-[2px]"> {/* 👈 gap added here */}
+      <img
+        src={img}
+        alt={`Document ${index + 1} Left`}
+        className="w-1/2 object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
+      />
+      <img
+        src={images[(index + 1) % images.length]}
+        alt={`Document ${index + 1} Right`}
+        className="w-1/2 object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
+      />
+    </div>
+
+    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl">
+      <button
+        onClick={() => setActiveSlide(index)}
+        className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center hover:scale-110 transition-transform"
+      >
+        <ZoomIn className="w-6 h-6 text-slate-900" />
+      </button>
+    </div>
+  </div>
+</SwiperSlide>
+
             ))}
           </Swiper>
 
