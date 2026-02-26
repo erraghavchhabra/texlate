@@ -54,7 +54,7 @@ const Hero = () => {
             </a>
 
             <a
-              href="#"
+              href="/dashboard/wallet"
               className="px-8 py-3 text-[15px] font-semibold border border-gray-300 rounded-xl hover:bg-gray-100 transition"
             >
               View Plans
