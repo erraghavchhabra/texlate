@@ -46,12 +46,12 @@ const Hero = () => {
             className="wow animate__animated animate__fadeInUp flex flex-col space-y-4 sm:flex-row justify-center mb-0 sm:mb-16 lg:mb-0 lg:justify-start sm:space-y-0 sm:space-x-4"
             data-wow-delay="0.6s"
           >
-            <Link
-              to="/upload"
+            <a
+              href="/upload"
               className="px-8 py-3 text-[15px] font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition inline-block"
             >
               Upload & Translate
-            </Link>
+            </a>
 
             <a
               href="#"

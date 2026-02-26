@@ -1,8 +1,67 @@
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useApp } from "../context/AppContext";
+import {
+  fetchUserProfile,
+  updateOrganizationName,
+} from "../api/organizationApi";
+import toast from "react-hot-toast";
 
 export default function OrganizationModal({ open, onClose }) {
-  const [name, setName] = useState("manish saini");
+  const [orgName, setOrgName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const { setUser, user } = useApp();
+  const currentOrgName = user?.organization?.name;
+  const orgId = user?.organization?.org_id;
+  console.log(6516151, user);
+
+  // Reset form when modal opens
+  useEffect(() => {
+    if (open) {
+      setOrgName(currentOrgName);
+      setError(null);
+    }
+  }, [open, currentOrgName]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!orgName.trim()) {
+      setError("Please enter an organization name");
+      return;
+    }
+
+    if (orgName.trim() === currentOrgName) {
+      setError("Please enter a different name");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Step 1: Update the organization name
+      await updateOrganizationName(orgId, orgName.trim());
+
+      // Step 2: Fetch fresh user profile with updated organization data
+      const userData = await fetchUserProfile();
+
+      // Step 3: Update global context
+      setUser(userData);
+
+      // Step 4: Show success toast
+      toast.success("Organization name updated successfully!");
+
+      // Step 5: Close modal
+      onClose();
+    } catch (err) {
+      console.error("Update organization name error:", err);
+      setError(err.message || "Failed to update organization name");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (!open) return null;
 
@@ -15,9 +74,13 @@ export default function OrganizationModal({ open, onClose }) {
       />
 
       {/* Modal */}
-      <div className="relative bg-white w-full max-w-lg mx-4 rounded-3xl shadow-2xl p-8 animate-scaleIn">
+      <form
+        onSubmit={handleSubmit}
+        className="relative bg-white w-full max-w-lg mx-4 rounded-3xl shadow-2xl p-8 animate-scaleIn"
+      >
         <button
           onClick={onClose}
+          type="button"
           className="absolute right-6 top-6 text-slate-400 hover:text-slate-700"
         >
           <X size={20} />
@@ -40,15 +103,21 @@ export default function OrganizationModal({ open, onClose }) {
         </label>
 
         <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          disabled={loading}
+          value={orgName}
+          autoFocus
+          onChange={(e) => setOrgName(e.target.value)}
           className="w-full mt-2 px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none transition"
         />
 
-        <button className="mt-6 w-full bg-blue-600 text-white py-4 rounded-xl font-semibold hover:scale-[1.01] transition">
-          UPDATE ORGANIZATION
+        <button
+          disabled={loading}
+          type="submit"
+          className="mt-6 w-full bg-blue-600 text-white py-4 rounded-xl font-semibold hover:scale-[1.01] transition"
+        >
+          {loading ? "UPDATING..." : "UPDATE ORGANIZATION"}
         </button>
-      </div>
+      </form>
     </div>
   );
 }

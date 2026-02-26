@@ -1,8 +1,118 @@
 import { Download, FileX } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
+import { useApp } from "../context/AppContext";
+import walletService from "../services/WalletService";
+import TransactionsTable from "./transactions/TransactionsTable";
+/**
+ * Format UTC date to IST with readable format for export
+ */
+const formatDateToISTForExport = (utcDateString) => {
+  const date = new Date(utcDateString);
+  const options = {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: "Asia/Kolkata",
+  };
+  const formatted = date.toLocaleString("en-IN", options);
+  return `${formatted} IST`;
+};
 
+/**
+ * Get full description for export (no truncation)
+ */
+const getFullDescription = (transaction) => {
+  if (transaction.type === "debit") {
+    const jobId = transaction.metadata.job_id;
+    if (jobId) {
+      return `Translation for ${jobId}`;
+    }
+    return "Translation";
+  }
+  const packageName = transaction.metadata.package_name || "Package";
+  const type = transaction.metadata.type || "top_up";
+  return `${packageName} - ${type}`;
+};
+
+/**
+ * Get performed by value
+ */
+const getPerformedBy = (transaction) => {
+  return (
+    transaction.metadata.user_name || transaction.metadata.user_email || "-"
+  );
+};
+
+/**
+ * Export transactions to CSV
+ */
+const exportToCSV = (transactions) => {
+  const headers = [
+    "#",
+    "Transaction ID",
+    "Pages",
+    "Description",
+    "Performed By",
+    "Type",
+    "Date & Time",
+  ];
+
+  const rows = transactions.map((txn, index) => {
+    const amount =
+      txn.type === "credit" ? `+${Math.abs(txn.amount)}` : `${txn.amount}`;
+    return [
+      index + 1,
+      txn.transaction_id, // Full transaction ID
+      amount,
+      getFullDescription(txn), // Full description without truncation
+      getPerformedBy(txn),
+      txn.type,
+      formatDateToISTForExport(txn.created_at),
+    ];
+  });
+
+  const csvContent = [
+    headers.join(","),
+    ...rows.map((row) =>
+      row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","),
+    ),
+  ].join("\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const link = document.createElement("a");
+  const url = URL.createObjectURL(blob);
+  link.setAttribute("href", url);
+  link.setAttribute(
+    "download",
+    `transactions_${new Date().toISOString().split("T")[0]}.csv`,
+  );
+  link.style.visibility = "hidden";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 export default function History() {
   const transactions = [];
+  const containerRef = useRef(null);
+  const { user } = useApp();
+  const [exporting, setExporting] = useState(false);
 
+  const isAdmin = user?.role === "admin";
+  const handleExport = useCallback(async () => {
+    try {
+      setExporting(true);
+      const response = await walletService.getTransactions(500); // Fetch more for export
+      const transactions = response.transactions || [];
+      exportToCSV(transactions);
+    } catch (err) {
+      console.error("Failed to export transactions:", err);
+    } finally {
+      setExporting(false);
+    }
+  }, []);
   return (
     <div className="animate-fadeIn">
       {/* Section Label */}
@@ -17,13 +127,19 @@ export default function History() {
         </h1>
 
         {/* Export Button */}
-        <button className="group flex items-center justify-center gap-2 bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-sm transition-all duration-300 hover:bg-blue-700 hover:shadow-md active:scale-[0.97]">
-          <Download
-            size={16}
-            className="transition-transform duration-300 group-hover:-translate-y-[1px]"
-          />
-          Export Usage
-        </button>
+        {isAdmin && (
+          <button
+            onClick={handleExport}
+            disabled={exporting}
+            className="group flex items-center justify-center gap-2 bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-sm transition-all duration-300 hover:bg-blue-700 hover:shadow-md active:scale-[0.97]"
+          >
+            <Download
+              size={16}
+              className="transition-transform duration-300 group-hover:-translate-y-[1px]"
+            />
+            <span>{exporting ? "Exporting..." : "Export Usage"}</span>
+          </button>
+        )}
       </div>
 
       <p className="text-slate-500 mb-6 sm:mb-8 text-sm sm:text-base">
@@ -31,98 +147,7 @@ export default function History() {
       </p>
 
       {/* Table Card */}
-      <div className="relative bg-white border border-slate-200 rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04)] overflow-hidden">
-        {/* Scroll Wrapper */}
-        <div className="w-full overflow-x-auto">
-          <table className="w-full min-w-[900px] text-sm">
-            {/* Sticky Head */}
-            <thead className="bg-slate-50 text-slate-600 sticky top-0 z-10">
-              <tr className="text-left">
-                {[
-                  "#",
-                  "Transaction ID",
-                  "Pages",
-                  "Description",
-                  "Performed By",
-                  "Type",
-                  "Date & Time",
-                  "Download",
-                ].map((h) => (
-                  <th
-                    key={h}
-                    className="px-4 sm:px-6 py-4 font-medium tracking-wide"
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-
-            <tbody>
-              {transactions.length === 0 ? (
-                <tr>
-                  <td colSpan="8">
-                    {/* Empty State */}
-                    <div className="flex flex-col items-center justify-center py-20 text-center animate-[fadeIn_.4s_ease]">
-                      <div className="bg-blue-50 p-5 rounded-full mb-5 animate-[floatY_4s_ease-in-out_infinite]">
-                        <FileX className="text-blue-600" size={28} />
-                      </div>
-
-                      <p className="font-semibold text-slate-700">
-                        No transactions found
-                      </p>
-
-                      <p className="text-sm text-slate-500 mt-2 max-w-sm">
-                        Your usage history will appear here once you start
-                        translating documents.
-                      </p>
-                    </div>
-                  </td>
-                </tr>
-              ) : (
-                transactions.map((item, index) => (
-                  <tr
-                    key={item.id}
-                    className="border-t border-slate-100 transition-all duration-200 hover:bg-slate-50 hover:shadow-[inset_0_1px_0_0_rgba(0,0,0,0.02)]"
-                  >
-                    <td className="px-4 sm:px-6 py-4">{index + 1}</td>
-
-                    <td className="px-4 sm:px-6 py-4 font-medium text-slate-800 whitespace-nowrap">
-                      {item.txnId}
-                    </td>
-
-                    <td className="px-4 sm:px-6 py-4">{item.pages}</td>
-
-                    <td className="px-4 sm:px-6 py-4 max-w-[260px] text-slate-600">
-                      {item.description}
-                    </td>
-
-                    <td className="px-4 sm:px-6 py-4 text-slate-600">
-                      {item.performedBy}
-                    </td>
-
-                    <td className="px-4 sm:px-6 py-4">
-                      <span className="px-2.5 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-600 ring-1 ring-blue-100">
-                        {item.type}
-                      </span>
-                    </td>
-
-                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-slate-500">
-                      {item.date}
-                    </td>
-
-                    <td className="px-4 sm:px-6 py-4 text-center">
-                      <button className="p-2 rounded-md text-blue-600 hover:bg-blue-50 transition">
-                        <Download size={16} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <TransactionsTable />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -24,8 +24,13 @@ import Wallet from "./dashboardPages/Wallet";
 import useSplitTextGSAP from "./animations/useSplitTextGSAP";
 import WOW from "wowjs";
 import "animate.css";
+import { Toaster } from "react-hot-toast";
+import ProtectedRoute from "./providers/ProtectedRoute";
+import OnboardingPage from "./pages/OnboardingPage";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
+
   useSplitTextGSAP();
   const location = useLocation();
 
@@ -39,7 +44,7 @@ export default function App() {
     <div className="min-h-screen flex flex-col">
       {/* Scroll reset on every route change */}
       <ScrollToTop />
-
+      <Toaster position="top-right" reverseOrder={false} />
       {/* Show Navbar only on public pages */}
       {!isDashboard && <Navbar />}
 
@@ -57,12 +62,51 @@ export default function App() {
           <Route path="/legal/*" element={<Legal />} />
           <Route path="/help/*" element={<HelpCenter />} />
 
+          <Route path="/onboarding" element={<OnboardingPage />} />
+          {/* not found page */}
+          <Route path="*" element={<NotFound />} />
           {/* Dashboard Routes */}
-          <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route path="new" element={<NewTranslation />} />
-            <Route path="history" element={<History />} />
-            <Route path="users-management" element={<UserManagement />} />
-            <Route path="wallet" element={<Wallet />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                {" "}
+                <DashboardLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route
+              path="new"
+              element={
+                <ProtectedRoute>
+                  <NewTranslation />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="history"
+              element={
+                <ProtectedRoute>
+                  <History />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="users-management"
+              element={
+                <ProtectedRoute>
+                  <UserManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="wallet"
+              element={
+                <ProtectedRoute>
+                  <Wallet />
+                </ProtectedRoute>
+              }
+            />
           </Route>
         </Routes>
       </main>

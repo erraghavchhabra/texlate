@@ -1,12 +1,11 @@
-import {
-  Menu,
-  ChevronDown,
-  LogOut,
-} from "lucide-react";
+import { Menu, ChevronDown, LogOut } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useApp } from "../context/AppContext";
 
 export default function Topbar({ setOpen }) {
+  const { logout, user } = useApp();
+  console.log(665165, user);
   const [dropdown, setDropdown] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const ref = useRef();
@@ -25,7 +24,16 @@ export default function Topbar({ setOpen }) {
     window.addEventListener("scroll", handle);
     return () => window.removeEventListener("scroll", handle);
   }, []);
+  const getInitials = (name) => {
+    if (!name) return "U";
+    const words = name.trim().split(" ");
+    if (words.length >= 2) {
+      return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+    }
+    return name.substring(0, 2).toUpperCase();
+  };
 
+  const initials = getInitials(user?.displayName);
   return (
     <header
       className={`fixed top-0 right-0 lg:left-[260px] left-0 z-30
@@ -49,7 +57,7 @@ export default function Topbar({ setOpen }) {
           </span>
 
           <p className="text-sm font-semibold tracking-wide text-slate-700">
-            MANISH SAINI
+            {user?.organization?.name}
           </p>
         </div>
 
@@ -60,7 +68,9 @@ export default function Topbar({ setOpen }) {
             <p className="text-[11px] text-slate-400 uppercase tracking-wider">
               Available Credit
             </p>
-            <p className="text-sm font-semibold text-slate-700">0 Pages</p>
+            <p className="text-sm font-semibold text-slate-700">
+              {user?.wallet?.balance?.toLocaleString()} Pages
+            </p>
           </div>
 
           {/* Profile */}
@@ -69,7 +79,7 @@ export default function Topbar({ setOpen }) {
             className="flex items-center gap-2 group"
           >
             <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-semibold shadow-sm transition-all duration-300 group-hover:scale-105 group-hover:shadow-md">
-              MS
+              {initials}
             </div>
 
             <ChevronDown
@@ -94,7 +104,7 @@ export default function Topbar({ setOpen }) {
               danger
               onClick={() => {
                 setDropdown(false);
-                navigate("/login"); // change if needed
+                logout();
               }}
             />
           </div>

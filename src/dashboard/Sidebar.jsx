@@ -6,7 +6,7 @@ import {
   CreditCard,
   ArrowLeft,
 } from "lucide-react";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { NavLink, useNavigate, useLocation, Link } from "react-router-dom";
 import Logo from "../assets/img/logoft.png";
 
 export default function Sidebar({ open, setOpen, onEditOrganization }) {
@@ -43,7 +43,9 @@ export default function Sidebar({ open, setOpen, onEditOrganization }) {
       >
         {/* Logo */}
         <div className="px-6 py-6 border-b border-slate-200/70">
-          <img src={Logo} alt="logo" className="h-10 object-contain" />
+          <Link to="/">
+            <img src={Logo} alt="logo" className="h-10 object-contain" />
+          </Link>
         </div>
 
         {/* Navigation */}
