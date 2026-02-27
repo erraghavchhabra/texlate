@@ -139,6 +139,7 @@ export default function Upload() {
           useUploadStore.setState({ jobStatus: "VERIFYING" });
           setTimeout(() => {
             uploadService.pollForWebhookVerification(jobId);
+            console.log(6516161 , "upload.jsx")
           }, 2000);
         } else {
           setTimeout(() => {

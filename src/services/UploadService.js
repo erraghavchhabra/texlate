@@ -1,19 +1,19 @@
-import axios from 'axios';
-import { useUploadStore } from '../Store/uploadStore';
-import apiClient from '../api/apiClient';
+import axios from "axios";
+import { useUploadStore } from "../Store/uploadStore";
+import apiClient from "../api/apiClient";
 
 const axiosClientJobs = axios.create({
   baseURL: `${process.env.REACT_APP_UPLOAD_URL}/jobs/`,
   headers: {
-    "ngrok-skip-browser-warning": "true"
-  }
+    "ngrok-skip-browser-warning": "true",
+  },
 });
 
 const axiosClientPayment = axios.create({
   baseURL: `${process.env.REACT_APP_UPLOAD_URL}/payments/`,
   headers: {
-    "ngrok-skip-browser-warning": "true"
-  }
+    "ngrok-skip-browser-warning": "true",
+  },
 });
 
 class UploadService {
@@ -40,9 +40,9 @@ class UploadService {
         textContent5 +
         textContent6;
 
-      const blob = new Blob([fullContent], { type: 'text/plain' });
+      const blob = new Blob([fullContent], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
       link.download = `recovery-link-${jobId}.txt`;
 
@@ -52,18 +52,18 @@ class UploadService {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
 
-      console.log('URL file downloaded successfully');
+      console.log("URL file downloaded successfully");
     } catch (error) {
-      console.error('Failed to download URL file:', error);
+      console.error("Failed to download URL file:", error);
     }
   }
 
   async uploadFile(fileDetails, onProgress) {
     if (!fileDetails.file) {
-      throw new Error('No file provided for upload.');
+      throw new Error("No file provided for upload.");
     }
 
-    const response = await axiosClientJobs.post('init', {
+    const response = await axiosClientJobs.post("init", {
       filename: fileDetails.fileName,
       size_bytes: fileDetails.fileSizeInBytes,
       target_language: fileDetails.language,
@@ -72,20 +72,20 @@ class UploadService {
     const { upload_url, job_id, expires_at } = response.data;
 
     const newUrl = `${window.location.pathname}?job_id=${job_id}`;
-    window.history.pushState({}, '', newUrl);
+    window.history.pushState({}, "", newUrl);
 
     const { setJob } = useUploadStore.getState();
     setJob(job_id, expires_at);
 
     await axios.put(upload_url, fileDetails.file, {
       headers: {
-        'Content-Type': 'application/pdf',
-        'x-goog-content-length-range': '0,209715200',
+        "Content-Type": "application/pdf",
+        "x-goog-content-length-range": "0,209715200",
       },
       onUploadProgress: (progressEvent) => {
         if (progressEvent.total) {
           const percentCompleted = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total
+            (progressEvent.loaded * 100) / progressEvent.total,
           );
           if (onProgress) {
             onProgress(percentCompleted);
@@ -94,7 +94,7 @@ class UploadService {
       },
     });
 
-    console.log('File uploaded successfully');
+    console.log("File uploaded successfully");
 
     setTimeout(() => {
       this.pollUploadStatus(job_id);
@@ -109,11 +109,11 @@ class UploadService {
   async checkJobExists(jobId) {
     try {
       await axiosClientJobs.get(`${jobId}/status`);
-      console.log('Job exists');
+      console.log("Job exists");
       return true;
     } catch (error) {
       if (error.response?.status === 404) {
-        console.log('Job not found');
+        console.log("Job not found");
         return false;
       }
       throw error;
@@ -121,7 +121,9 @@ class UploadService {
   }
 
   async createPaymentSession(jobId) {
-    const response = await axiosClientPayment.post(`${jobId}/create-payment-order`);
+    const response = await axiosClientPayment.post(
+      `${jobId}/create-payment-order`,
+    );
     return response.data;
   }
 
@@ -130,7 +132,7 @@ class UploadService {
       razorpay_order_id: orderId,
       razorpay_payment_id: paymentId,
       razorpay_signature: signature,
-      job_id: jobId
+      job_id: jobId,
     });
 
     return response.data;
@@ -149,16 +151,19 @@ class UploadService {
         amount: paymentData.amount,
         currency: paymentData.currency,
         order_id: paymentData.order_id,
-        name: 'PDF Translation Service',
+        name: "PDF Translation Service",
         description: `Translation for Job ID: ${jobId}`,
         handler: async (response) => {
-          console.log('Payment successful, waiting for webhook verification', response);
+          console.log(
+            "Payment successful, waiting for webhook verification",
+            response,
+          );
 
           UploadService.downloadUrlAsTextFile(jobId);
           useUploadStore.setState({
             paymentCompleted: true,
-            paymentStatus: 'VERIFYING',
-            jobStatus: 'VERIFYING'
+            paymentStatus: "VERIFYING",
+            jobStatus: "VERIFYING",
           });
 
           if (onSuccess) onSuccess(response);
@@ -168,36 +173,36 @@ class UploadService {
           }, 2000);
         },
         prefill: {
-          email: '',
-          contact: ''
+          email: "",
+          contact: "",
         },
         theme: {
-          color: '#4F46E5'
+          color: "#4F46E5",
         },
         modal: {
           ondismiss: function () {
-            console.log('Payment modal closed by user');
+            console.log("Payment modal closed by user");
             useUploadStore.setState({
-              paymentStatus: 'CANCELLED'
+              paymentStatus: "CANCELLED",
             });
-          }
-        }
+          },
+        },
       };
 
       const rzp = new window.Razorpay(options);
 
-      rzp.on('payment.failed', function (response) {
-        console.error('Payment failed', response.error);
+      rzp.on("payment.failed", function (response) {
+        console.error("Payment failed", response.error);
         useUploadStore.setState({
-          paymentStatus: 'FAILED',
-          paymentError: response.error.description
+          paymentStatus: "FAILED",
+          paymentError: response.error.description,
         });
         if (onError) onError(response.error);
       });
 
       rzp.open();
     } catch (error) {
-      console.error('Error initializing payment:', error);
+      console.error("Error initializing payment:", error);
       if (onError) onError(error);
       throw error;
     }
@@ -205,11 +210,12 @@ class UploadService {
 
   loadRazorpayScript() {
     return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
       script.async = true;
       script.onload = () => resolve();
-      script.onerror = () => reject(new Error('Failed to load Razorpay script'));
+      script.onerror = () =>
+        reject(new Error("Failed to load Razorpay script"));
       document.body.appendChild(script);
     });
   }
@@ -225,18 +231,18 @@ class UploadService {
           const statusResponse = await this.getUploadStatus(jobId);
 
           const uiStatus =
-            statusResponse.status === 'WEBHOOK_VERIFICATION_PENDING'
-              ? 'VERIFYING'
+            statusResponse.status === "WEBHOOK_VERIFICATION_PENDING"
+              ? "VERIFYING"
               : statusResponse.status;
 
           useUploadStore.setState({
             jobStatus: uiStatus,
           });
 
-          if (statusResponse.status === 'QUEUED') {
+          if (statusResponse.status === "QUEUED") {
             useUploadStore.setState({
-              jobStatus: 'QUEUED',
-              paymentStatus: 'SUCCESS'
+              jobStatus: "QUEUED",
+              paymentStatus: "SUCCESS",
             });
 
             setTimeout(() => {
@@ -247,22 +253,24 @@ class UploadService {
             return true;
           }
 
-          if (statusResponse.status === 'FAILED' || statusResponse.error) {
+          if (statusResponse.status === "FAILED" || statusResponse.error) {
             useUploadStore.setState({
-              jobStatus: 'FAILED',
-              paymentStatus: 'FAILED',
-              paymentCompleted: false
+              jobStatus: "FAILED",
+              paymentStatus: "FAILED",
+              paymentCompleted: false,
             });
-            reject(new Error(statusResponse.error || 'Payment verification failed'));
+            reject(
+              new Error(statusResponse.error || "Payment verification failed"),
+            );
             return true;
           }
 
           if (pollCount >= maxPolls) {
             useUploadStore.setState({
-              jobStatus: 'VERIFICATION_TIMEOUT',
-              paymentStatus: 'TIMEOUT'
+              jobStatus: "VERIFICATION_TIMEOUT",
+              paymentStatus: "TIMEOUT",
             });
-            reject(new Error('Webhook verification timeout after 30 seconds'));
+            reject(new Error("Webhook verification timeout after 30 seconds"));
             return true;
           }
 
@@ -296,7 +304,7 @@ class UploadService {
           }
 
           if (
-            statusResponse.status === 'AWAITING_PAYMENT' &&
+            statusResponse.status === "AWAITING_PAYMENT" &&
             statusResponse.mime_type_verified === true &&
             statusResponse.file_integrity_checked === true
           ) {
@@ -306,7 +314,7 @@ class UploadService {
               isPayable: true,
               amount: statusResponse.calculated_total ?? 0,
               pages: statusResponse.pages_detected ?? 0,
-              jobStatus: 'AWAITING_PAYMENT'
+              jobStatus: "AWAITING_PAYMENT",
             });
 
             resolve(statusResponse);
@@ -326,7 +334,7 @@ class UploadService {
       if (response.data.pdf_url && response.data.docx_url) {
         return {
           pdf_url: response.data.pdf_url,
-          docx_url: response.data.docx_url
+          docx_url: response.data.docx_url,
         };
       }
 
@@ -348,8 +356,8 @@ class UploadService {
           });
 
           if (
-            statusResponse.status === 'COMPLETED' ||
-            statusResponse.status === 'DOWNLOAD'
+            statusResponse.status === "COMPLETED" ||
+            statusResponse.status === "DOWNLOAD"
           ) {
             let downloadUrls = statusResponse.result_download_urls;
 
@@ -359,7 +367,7 @@ class UploadService {
 
             if (downloadUrls) {
               useUploadStore.setState({
-                jobStatus: 'COMPLETED',
+                jobStatus: "COMPLETED",
                 downloadUrls: downloadUrls,
                 translationProgress: 100,
               });
@@ -369,11 +377,11 @@ class UploadService {
             return true;
           }
 
-          if (statusResponse.status === 'FAILED' || statusResponse.error) {
+          if (statusResponse.status === "FAILED" || statusResponse.error) {
             useUploadStore.setState({
-              jobStatus: 'FAILED',
+              jobStatus: "FAILED",
             });
-            reject(new Error(statusResponse.error || 'Translation failed'));
+            reject(new Error(statusResponse.error || "Translation failed"));
             return true;
           }
 
@@ -393,6 +401,246 @@ class UploadService {
         }, 40000);
       });
     });
+  }
+
+  // ============================================================================
+  // Wallet-Based Flow Methods (for AuthenticatedUploadPage)
+  // All methods use apiClient which includes Firebase auth token
+  // ============================================================================
+
+  /**
+   * Initialize a job for wallet-based flow
+   * POST /v1/org_jobs/init
+   */
+  async initOrgJob(fileDetails, onProgress) {
+    if (!fileDetails.file) {
+      throw new Error("No file provided for upload.");
+    }
+
+    // Call org_jobs/init endpoint with auth
+    const response = await apiClient.post("/org_jobs/init", {
+      filename: fileDetails.fileName,
+      size_bytes: fileDetails.fileSizeInBytes,
+      target_language: fileDetails.language,
+    });
+
+    const { upload_url, job_id, expires_at } = response.data;
+
+    // Update URL with job_id
+    const newUrl = `${window.location.pathname}?job_id=${job_id}`;
+    window.history.pushState({}, "", newUrl);
+
+    // Set job in store
+    const { setJob } = useUploadStore.getState();
+    setJob(job_id, expires_at);
+
+    // Upload file to signed URL
+    await axios.put(upload_url, fileDetails.file, {
+      headers: {
+        "Content-Type": "application/pdf",
+        "x-goog-content-length-range": "0,209715200",
+      },
+      onUploadProgress: (progressEvent) => {
+        if (progressEvent.total) {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total,
+          );
+          if (onProgress) {
+            onProgress(percentCompleted);
+          }
+        }
+      },
+    });
+
+    console.log("File uploaded successfully (org_jobs)");
+
+    // Start polling for confirmation status
+    setTimeout(() => {
+      this.pollOrgJobForConfirmation(job_id);
+    }, 5000);
+
+    return { job_id, expires_at };
+  }
+
+  /**
+   * Get org job status
+   * GET /v1/org_jobs/{job_id}/status
+   */
+  async getOrgJobStatus(jobId) {
+    const response = await apiClient.get(`/org_jobs/${jobId}/status`);
+    return response.data;
+  }
+
+  /**
+   * Poll until status is AWAITING_WALLET_CONFIRMATION
+   */
+  async pollOrgJobForConfirmation(jobId) {
+    return new Promise((resolve, reject) => {
+      console.log("Starting org job validation polling for job:", jobId);
+
+      const poll = async () => {
+        try {
+          const statusResponse = await this.getOrgJobStatus(jobId);
+          console.log("Org job validation status:", statusResponse.status);
+
+          if (statusResponse.error) {
+            useUploadStore.setState({
+              jobStatus: "FAILED",
+            });
+            reject(new Error(statusResponse.error));
+            return true;
+          }
+
+          if (
+            statusResponse.status === "AWAITING_WALLET_CONFIRMATION" &&
+            statusResponse.mime_type_verified === true &&
+            statusResponse.file_integrity_checked === true
+          ) {
+            console.log("File validated! Ready for wallet confirmation");
+
+            useUploadStore.setState({
+              isPayable: true,
+              pages: statusResponse.pages_detected ?? 0,
+              jobStatus: "AWAITING_WALLET_CONFIRMATION",
+            });
+
+            resolve();
+            return true;
+          }
+
+          return false;
+        } catch (err) {
+          reject(err);
+          return true;
+        }
+      };
+
+      poll().then((shouldStop) => {
+        if (shouldStop) return;
+
+        const interval = setInterval(async () => {
+          const shouldStop = await poll();
+          if (shouldStop) {
+            clearInterval(interval);
+          }
+        }, 5000);
+      });
+    });
+  }
+
+  /**
+   * Confirm wallet deduction
+   * POST /v1/wallets/{job_id}/confirm-wallet-deduction
+   */
+  async confirmWalletDeduction(jobId) {
+    const response = await apiClient.post(
+      `/wallets/${jobId}/confirm-wallet-deduction`,
+    );
+    return response.data;
+  }
+
+  /**
+   * Poll org job translation status after wallet deduction
+   */
+  async pollOrgTranslationStatus(jobId) {
+    return new Promise((resolve, reject) => {
+      const poll = async () => {
+        try {
+          const statusResponse = await this.getOrgJobStatus(jobId);
+          console.log("Org translation status:", statusResponse.status);
+
+          useUploadStore.setState({
+            jobStatus: statusResponse.status,
+            translationProgress: statusResponse.progress || 0,
+          });
+
+          if (
+            statusResponse.status === "COMPLETED" ||
+            statusResponse.status === "DOWNLOAD"
+          ) {
+            console.log("Org translation completed! Fetching download URLs...");
+
+            const downloadUrls = await this.getOrgDownloadUrls(jobId);
+
+            if (downloadUrls) {
+              useUploadStore.setState({
+                jobStatus: "COMPLETED",
+                downloadUrls: downloadUrls,
+                translationProgress: 100,
+              });
+            }
+
+            console.log("Org translation completed successfully!");
+            resolve();
+            return true;
+          }
+
+          if (statusResponse.status === "FAILED" || statusResponse.error) {
+            useUploadStore.setState({
+              jobStatus: "FAILED",
+            });
+            reject(new Error(statusResponse.error || "Translation failed"));
+            return true;
+          }
+
+          return false;
+        } catch (err) {
+          console.error("Error polling org translation status:", err);
+          reject(err);
+          return true;
+        }
+      };
+
+      poll().then((shouldStop) => {
+        if (shouldStop) return;
+
+        const interval = setInterval(async () => {
+          const shouldStop = await poll();
+          if (shouldStop) {
+            clearInterval(interval);
+          }
+        }, 40000);
+      });
+    });
+  }
+
+  /**
+   * Get download URLs for org jobs
+   * GET /v1/org_jobs/{job_id}/download
+   */
+  async getOrgDownloadUrls(jobId) {
+    try {
+      const response = await apiClient.get(`/org_jobs/${jobId}/download`);
+      console.log("📦 Org download endpoint response:", response.data);
+
+      if (response.data.pdf_url && response.data.docx_url) {
+        return {
+          pdf_url: response.data.pdf_url,
+          docx_url: response.data.docx_url,
+        };
+      }
+
+      console.error("❌ Invalid response format from org /download endpoint");
+      return null;
+    } catch (error) {
+      console.error("❌ Error fetching org download URLs:", error);
+      return null;
+    }
+  }
+
+  /**
+   * Check if an org job exists
+   */
+  async checkOrgJobExists(jobId) {
+    try {
+      await this.getOrgJobStatus(jobId);
+      return true;
+    } catch (error) {
+      if (error.response?.status === 404) {
+        return false;
+      }
+      throw error;
+    }
   }
 }
 
